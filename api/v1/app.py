@@ -154,18 +154,23 @@ def get_user(user_id):
 def post_user():
     if not request.get_json():
         return make_response(jsonify({'error': 'Not a json'}), 400)
+
     if not 'user_name' in request.get_json():
         return make_response(jsonify({'error': 'Missing user_name'}), 400) 
+    
     if 'email' not in request.get_json():
         make_response(jsonify({'error': 'Missing email'}), 400)
+
     if 'password' not in request.get_json():
         make_response(jsonify({'error': 'Missing password'}), 400)
     
     for user in User.query.all():
         if user.email == request.get_json()['email']:
             return make_response(jsonify({'error': 'email already exists'}), 400)
+        
         if user.user_name == request.get_json()['user_name']:
             return make_response(jsonify({'error': 'user_name already exists'}), 400)
+    
     while True:
         id = uuid4()
         for user in User.query.all():
@@ -179,7 +184,7 @@ def post_user():
                     password=request.get_json()['password'])
     new_user.save()
 
-    return make_response(jsonify({'success': 'new user added'}), 201)
+    return make_response(jsonify({'success': id}), 201)
 
 @app.route('/users/<string:user_id>', methods=['PUT'])
 def put_user(user_id):
@@ -191,17 +196,25 @@ def put_user(user_id):
         make_response(jsonify({'error': 'Missing email'}), 400)
     if 'password' not in request.get_json():
         make_response(jsonify({'error': 'Missing password'}), 400)
-    
+
+    for user in User.query.all():
+        if user.email == request.get_json()['email']:
+            if user.id != user_id:
+                return make_response(jsonify({'error': 'email already exists'}), 400)
+        
+        if user.user_name == request.get_json()['user_name']:
+            if user.id != user_id:
+                return make_response(jsonify({'error': 'user_name already exists'}), 400)
     
     with app.app_context():
         user = User.query.get_or_404(user_id)
-        user.user_name = request.get_json()['user_name']
-        user.email = request.get_json()['email']
-        user.password = request.get_json()['password']
         user.updated_at = datetime.now()
+        for attr, val in request.get_json().items():
+            if attr not in ['id', 'created_at', 'updated_at']:
+                setattr(user, attr, val)
         db.session.add(user)
         db.session.commit()
-    
+        
     return jsonify({'success': 'User Updated'})
 
 @app.route('/users/<string:user_id>', methods=['DELETE'])
@@ -268,7 +281,7 @@ def post_log():
                   status=request.get_json()['status'])
     new_log.save()
 
-    return make_response(jsonify({'success': 'log created'}), 201)
+    return make_response(jsonify({'success': id}), 201)
 
 @app.route('/logs/<string:log_id>', methods=['PUT'])
 def put_log(log_id):
@@ -284,13 +297,14 @@ def put_log(log_id):
         return make_response(jsonify({'error': 'Missing status'}), 400)
     if 'status' in request.get_json() and request.get_json()['status'] not in [1, 2, 3]:
         return make_response(jsonify({'error': 'Invalid Status'}), 400)
+    
+    
     with app.app_context():
         log = Log.query.get_or_404(log_id)
-        log.user_id = request.get_json()['user_id']
-        log.title = request.get_json()['title']
-        log.description = request.get_json()['description']
-        log.status = request.get_json()['status']
         log.updated_at = datetime.now()
+        for attr, val in request.get_json().items():
+            if attr not in ['id', 'created_at', 'updated_at']:
+                setattr(log, attr, val)
         db.session.add(log)
         db.session.commit()
 
@@ -343,7 +357,7 @@ def post_topic():
                       name=request.get_json()['name'])
     new_topic.save()
 
-    return make_response(jsonify({'success': 'topic created'}), 201)
+    return make_response(jsonify({'success': id}), 201)
 
 @app.route('/topics/<string:topic_id>', methods=['PUT'])
 def put_topics(topic_id):
@@ -356,9 +370,10 @@ def put_topics(topic_id):
     
     with app.app_context():
         topic = Topic.query.get_or_404(topic_id)
-        topic.log_id = request.get_json()['log_id']
-        topic.name = request.get_json()['name']
         topic.updated_at = datetime.now()
+        for attr, val in request.get_json().items():
+            if attr not in ['id', 'created_at', 'updated_at']:
+                setattr(topic, attr, val)
         db.session.add(topic)
         db.session.commit()
 
