@@ -89,15 +89,17 @@ def index():
 
 @app.before_request
 def log_request():
-    if path.exists('log.txt'):
-        with open('log.txt', 'a', encoding='utf-8') as f:
-            f.write('{} \t\t\t\t\t\t\t {} \t\t\t\t\t\t\t {}\n'.format(request.path, request.method, datetime.utcnow()))
+    if path.exists('tabular_log.txt'):
+        with open('tabular_log.txt', 'a', encoding='utf-8') as f:
+            template = '|{:<60} |{:<10} |{:<20}|\n'
+            f.write(template.format(request.path, request.method ,datetime.now().strftime('%Y-%m-%d %H:%M')))
     else:
-        with open('log.txt', 'w', encoding='utf-8') as f:
+        with open('tabular_log.txt', 'w', encoding='utf-8') as f:
             f.write('*** REQUEST LOGS ***\n\n')
-            f.write('url \t\t\t\t\t\t\t method \t\t\t\t\t\t\t date\n')
-            f.write('--- \t\t\t\t\t\t\t ------ \t\t\t\t\t\t\t ----\n')
-            f.write('{} \t\t\t\t\t\t\t {} \t\t\t\t\t\t\t {}\n'.format(request.path, request.method ,datetime.utcnow()))
+            template = '|{:<60} |{:<10} |{:<20}|\n'
+            f.write(template.format('url', 'method', 'date'))
+            f.write(template.replace(':', ':-').format('', '', ''))
+            f.write(template.format(request.path, request.method ,datetime.now().strftime('%Y-%m-%d %H:%M')))
 
 
 # Users Route
