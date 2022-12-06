@@ -4,10 +4,13 @@ from os import path
 from uuid import uuid4
 from flask import Flask, make_response, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://kalab:root@localhost/the_journey'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 db = SQLAlchemy(app=app)
 
