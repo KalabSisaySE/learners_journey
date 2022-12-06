@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %} Edit Account {% endblock %}
+
+{% block content %}
+
+    <br>
+    {% if alert %}
+        <div class="alert alert-danger" role="alert">
+            <div align="center">{{ alert }}</div>
+        </div>
+    {% endif %}
+    <br>
+
+    {% if user %}
+        <form action="", method="POST">
+            <div class="card">
+                <h5 class="card-header">Edit Account</h5>
+                
+                
+                <div class="card-body">
+
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th> <label for="username"> <mark> Username </mark> </label> </th>
+                                    <td> <input class="inputs" type="text" name="user_name" id="username" size="70" value="{{ user.user_name }}">  </td>
+                                </tr>
+                                <tr>
+                                    <th> <label for="email"> <mark> Email </mark> </label> </th>
+                                    <td> <input class="inputs" type="text" name="email" id="email" size="70" value="{{ user.email }}" >  </td>
+                                </tr>
+                                <tr>
+                                    <th> <label for="password"> <mark> Password </mark> </label> </th>
+                                    <td> <input class="inputs" type="text" name="password" id="password" size="70" value="{{ user.password }}">  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                </div>
+
+                <div class="card-footer">
+                    <ul class="list-inline" >
+                        <li class="list-inline-item" style="margin-right: 950px;">
+                                <input type="submit" value="Save Changes" class="btn btn-outline-primary">      
+                        </li>
+                        <li class="list-inline-item" >
+                                <a href="/user_account" class="btn btn-outline-secondary"> Cancel </a>      
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+
+    {% endif %}
+
+{% endblock %}

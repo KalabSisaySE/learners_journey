@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+
+{% block logo_nav %} / {% endblock %}
+
+{% block navigation %}
+  
+  <a href="/login" class="nav-item nav-link my-auto" style="font-size: 18px; margin-right: 10px;">Login</a>
+  <a href="/sign-up" class="nav-item nav-link my-auto" style="font-size: 18px;"> Signup </a>
+  
+{% endblock %}
+
+{% block title %}Home{% endblock %} 
+
+{% block content%}
+
+  <br>
+
+  <div style="border: 1px black solid; border-radius: 10px; background-color: rgb(233, 233, 233);">
+    <h1 align="center"> Welcome to the Learner's Journey </h1>
+  </div>
+
+  <br> <br>
+  <h2 align="center"> If you are new <a href="/sign-up">Register</a></h2>
+  
+  <h2 align="center"> If you have an account <a href="/login">Login</a></h2>
+  
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %} 
+{% block title %}Edit Log{% endblock %} 
+
+{% block content %}
+
+    {% if log %}
+        {% if alert %}
+        <br>
+        <div class="alert alert-danger" role="alert">
+            <div align="center">{{ alert }}</div>
+        </div>
+        {% endif %}
+        
+        
+        <form method="POST">
+        <br>
+        <h3 align="center">Edit Log</h3>
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            value="{{ log.title }}"
+            />
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ log.description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="topic">Topic</label>
+            <input
+            type="text"
+            class="form-control"
+            id="topic"
+            name="topic"
+            value="{{ log.topics|join(', ') }}"
+            />
+        </div>
+
+
+        <div class="form-group">
+            <label for="mood">Mood</label>
+            <input
+            type="text"
+            class="form-control"
+            id="mood"
+            name="mood"
+            value="{{ log.status }}"
+            />
+        </div>
+        
+        
+        <br />
+        <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    {% endif %}
+
+{% endblock %}
+    

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+    {% if message %}
+        <br>
+        <div class="alert alert-success" role="alert">
+        <div align="center">{{ message }}</div>
+        </div>
+    {% endif %}
+    
+    {% if user %}
+        <br>
+        <h1 align="center" > Welcome Back <mark><em>{{ user.user_name }}</em></mark> </h1>
+        
+        {% if user['logs'] %}
+
+            {% set topic = namespace(value=0) %}
+            {% for log in user.logs %}
+                {% set topic.value = topic.value +  log.topics|length  %}
+            {% endfor %}
+
+            <h3> Status </h3>
+            <br>
+            <div >
+                <h6><mark>Total Logs:</mark> <em>{{ user.logs|length }}</em> </h6>
+                <h6><mark>Total Topics:</mark> <em>{{ topic.value }}</em> </h6>
+                <h6><mark>Latest Log / Last Modified:</mark> <em>{{ user['logs'][0]['title'] }}</em> </h6>
+            </div>
+
+        {% endif %}
+        
+        <br>
+        <br>
+        <h3> Recent Logs </h3>
+        <br>
+
+
+        {% if user['logs'] %}
+            {% for log in user['logs'][:3] %}
+
+                <div class="card">
+                    <h5 class="card-header">{{ log.title }} </h5>
+                    <div class="card-body">
+                      
+                      <div class="topics">
+                        {% for topic in log.topics %}
+                          <div class="d-inline p-1 bg-primary text-white rounded-pill" style="margin-right: 4px;">{{topic}}</div>
+                        {% endfor %}
+                      </div>
+                      <br> 
+                      <h6 class="card-title">{{ log.description }}</h6>
+                      
+                    </div>
+                    <div class="card-footer">
+                        <ul class="list-inline" >
+                            <li class="list-inline-item" style="margin-right: 435px;">
+                                <mark> mood:</mark>    
+                                {% if log.status == 1 %}
+                                    😊️
+                                {% elif log.status == 2 %}
+                                    😐️
+                                {% elif log.status == 3 %} 
+                                    😒️
+                                {% endif %}
+                            </li>
+                            <li class="list-inline-item" style="margin-right: 435px;">
+                                {% set date = log.updated_at.split('T') %}
+                                <mark>last-updated:</mark> <em>{{ date[0] }}</em>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="/view_log/{{ log.id }}" class="btn btn-outline-secondary">View Log</a>        
+                            </li>
+                        </ul>
+
+                        <div style="width: 400px; display: inline;"></div>
+                        <div style="width: 400px;"></div>
+                    </div>
+                </div>
+
+                <br>
+            {% endfor %}
+            <ul class="list-inline">
+            
+                <li class="list-inline-item" style="margin-right: 150px;">
+                    <a href="/log" class="btn btn-outline-primary">Add a New Log</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="/all_logs" class="btn btn-outline-primary">All Logs</a>        
+                </li>
+            
+            </ul>
+            
+            <br>
+        {% else  %}
+            <h4>You have No Logs Yet <a href="/log">Start Logging</a></h4>
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}

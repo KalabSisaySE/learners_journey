@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %} View Log {% endblock %} 
+
+{% block content %}
+<br>
+
+
+{% if log %}
+    {% if alert %}
+    <br>
+    <div class="alert alert-danger" role="alert">
+      <div align="center">{{ alert }}</div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h5 class="card-header"> LOG </h5>
+        <div class="card-body">
+            <table class="table">
+                <tbody>
+
+                  <tr>
+                    <th scope="col-1"> <mark> Title </mark>  </th>
+                    <td> {{ log.title }} </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="col-2" style="margin: 100px;"> <mark> Description  </mark>  </th>
+                    <td> {{ log.description }} </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="col-1"> <mark> Mood </mark>  </th>
+                    {% if log.status == 1 %}
+                        {% set mood = "😊️" %}
+                    {% elif log.status == 2 %}
+                        {% set mood = "😐️" %}
+                    {% elif log.status == 3 %} 
+                        {% set mood = "😒️" %}
+                    {% endif %}
+                    <td> {{ mood }}/{{ log.status }} </td>
+                  </tr>
+                 
+                  <tr>
+                    <th scope="col-1"> <mark> Topics: </mark>  </th>
+                    <td>
+                        {% for topic in log.topics %}
+                            {{ topic }} <br>
+                        {% endfor %}
+                    </td>
+                    <br>
+                  </tr>
+                  
+                  <tr>
+                    <th scope="col-1"> <mark> Created-at </mark>  </th>
+                    {% set created_at = log.created_at.split('T') %}
+                    <td> {{ created_at[0] }} / {{ created_at[1] }} </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="col-1"> <mark> Updated-at </mark>  </th>
+                    {% set updated_at = log.updated_at.split('T') %}
+                    <td> {{ updated_at[0] }} / {{ updated_at[1] }} </td>
+                  </tr>
+
+                  <tr>
+                </tbody>
+              </table>   
+        </div>
+
+        <div class="card-footer">
+            <ul class="list-inline" >
+                <li class="list-inline-item" style="margin-right: 1050px;">
+                    <a href="/edit_log/{{ log.id }}" class="btn btn-outline-primary">Edit</a>        
+                </li>
+                <li class="list-inline-item">
+                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >Delete</a>        
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Log</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              Do you really want to delete this log? This process cannot be undone.
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <form action="" method="post">
+            <a href="/delete_log/{{ log.id }}" class="btn btn-danger" >Delete Log</a>  
+          </form>
+          </div>
+      </div>
+      </div>
+    </div>
+
+
+{% endif %}
+
+{% endblock %}

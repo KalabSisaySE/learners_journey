@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %} All Logs {% endblock %}
+
+{% block content %}
+
+<br>
+
+<h1> All Logs </h1>
+<br>
+
+
+
+<div class="input-group">
+    <div class="dropdown" style="margin-right: 25px;">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Sort By
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="/filter_logs/title">Title</a></li>
+          <li><a class="dropdown-item" href="/filter_logs/created_at">Created-at</a></li>
+          <li><a class="dropdown-item" href="/filter_logs/updated_at">Updated-at</a></li>
+        </ul>
+    </div>
+
+    <div class="form-outline" style="margin-right: 20px;">
+        <input type="search" id="form1" class="live-search-box" placeholder="filter by log's title">
+    </div>
+
+</div>
+
+<br>
+
+{% if logs %}
+
+    <div class="all-cards">
+        {% for log in logs %}
+                <div class="card">
+        
+                    <h5 class="card-header">{{ log.title }} </h5>
+                    <div class="card-body">
+        
+                        <div class="topics">
+                        {% for topic in log.topics %}
+                            <div class="d-inline p-2 bg-primary text-white rounded-pill">{{topic}}</div>
+                        {% endfor %}
+                        </div>
+                        <br>
+                        <h6 class="card-title">{{ log.description }}</h6>
+        
+                    </div>
+                    <div class="card-footer">
+                        <ul class="list-inline" >
+                            <li class="list-inline-item" style="margin-right: 435px;">
+                                <mark> mood:</mark>
+                                {% if log.status == 1 %}
+                                    😊️
+                                {% elif log.status == 2 %}
+                                    😐️
+                                {% elif log.status == 3 %}
+                                    😒️
+                                {% endif %}
+                            </li>
+                            <li class="list-inline-item" style="margin-right: 435px;">
+                                {% set date = log.updated_at.split('T') %}
+                                <mark>last-updated:</mark> <em>{{ date[0] }}</em>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="/view_log/{{ log.id }}" class="btn btn-outline-secondary">View Log</a>
+                            </li>
+                        </ul>
+                        <div style="width: 400px; display: inline;"></div>
+                        <div style="width: 400px;"></div>
+                    </div>
+                </div>
+            <br>
+        {% endfor %}
+    </div>
+    
+    <br>
+
+    <ul class="list-inline">
+            
+        <li class="list-inline-item" style="margin-right: 150px;">
+            <a href="/log" class="btn btn-outline-primary">Add a New Log</a>
+        </li>
+        <li class="list-inline-item">
+            <a href="/user_home" class="btn btn-outline-primary">Back</a>        
+        </li>
+    
+    </ul>
+
+    <br>
+
+{% endif %}
+
+{% endblock %}

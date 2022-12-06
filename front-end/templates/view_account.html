@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %} My Account {% endblock %}
+
+{% block content %}
+
+    <br>
+    <br>
+
+    {% if user %}
+        
+        <div class="card">
+            <h5 class="card-header">My Account</h5>
+            
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th> <mark> Username </mark> </th>
+                            <td> {{ user.user_name }} </td>
+                        </tr>
+                        <tr>
+                            <th> <mark> Email </mark> </th>
+                            <td> {{ user.email }} </td>
+                        </tr>
+                        <tr>
+                            <th> <mark> Password </mark> </th>
+                            <td> {{ user.password }} </td>
+                        </tr>
+                        <tr>
+                            <th> <mark> Account Created At </mark> </th>
+                            {% set created_at = user.created_at.split('T') %}
+                            <td> {{ created_at[0] }} / {{ created_at[1] }} </td>
+                        </tr>
+                        <tr>
+                            <th> <mark> Last Updated At </mark> </th>
+                            {% set updated_at = user.updated_at.split('T') %}
+                            <td> {{ updated_at[0] }}  / {{ updated_at[1] }} </td>
+                        </tr>
+                        <tr>
+                            <th> <mark> Total Logs Saved </mark> </th>
+                            <td> {{ user.logs|length }} </td>
+                        </tr>
+                        <tr>
+                            <th> <mark> Total Topics Saved </mark> </th>
+                            {% set topic = namespace(value=0) %}
+                            {% for log in user.logs %}
+                                {% set topic.value = topic.value + log.topics|length %}
+                            {% endfor %}
+                            <td> {{ topic.value }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <ul class="list-inline" >
+                    <li class="list-inline-item" style="margin-right: 1100px;">
+                        <a href="/edit_user" class="btn btn-outline-primary">Edit</a>        
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>        
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    
+    <!-- Delete Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Your Account</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Do you really want to your account? This process cannot be undone.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <a href="/delete_user" class="btn btn-danger"> Delete </a>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+
+    {% endif %}
+
+{% endblock %}

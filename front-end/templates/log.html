@@ -1,0 +1,66 @@
+{% extends "base.html" %} 
+{% block title %}Log{% endblock %} 
+
+{% block content %}
+
+    {% if alert %}
+      <br>
+      <div class="alert alert-danger" role="alert">
+        <div align="center">{{ alert }}</div>
+      </div>
+    {% endif %}
+    
+    
+    <form method="POST">
+      <br>
+      <h3 align="center">Add a new Log</h3>
+
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        placeholder="give a title for today's log, can be empty"
+        />
+      </div>
+      <br>
+      
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" id="description" placeholder="short summary of your day" cols="30" rows="10"></textarea>
+      </div>
+      <br>
+
+      <div class="form-group">
+        <label for="topic">Topic</label>
+        <input
+        type="text"
+        class="form-control"
+        id="topic"
+        name="topic"
+        placeholder="what you have read about, you can enter morethan one topic using comma"
+        />
+      </div>
+      <br>
+
+      <div class="form-group">
+        <label for="mood">Mood</label>
+        <input
+        type="text"
+        class="form-control"
+        id="mood"
+        name="mood"
+        placeholder="1 = :)    2 = :|    3 = :("
+        />
+      </div>
+      
+      
+      <br />
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    
+
+{% endblock %}
+    
