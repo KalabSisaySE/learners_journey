@@ -19,8 +19,8 @@ class BaseModel:
     """the base for other classes"""
 
     id = db.Column(db.String(40), primary_key=True, default=str(uuid4()))
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     def save(self):
         """saves the current object in storage"""
@@ -40,9 +40,9 @@ class BaseModel:
         new_dict['__class__'] = str(type(self).__name__)
         
         if "created_at" in new_dict:
-            new_dict["created_at"] = new_dict["created_at"].isoformat()
+            new_dict["created_at"] = new_dict["created_at"].strftime('%Y-%m-%dT%H:%M')
         if "updated_at" in new_dict:
-            new_dict["updated_at"] = new_dict["updated_at"].isoformat()
+            new_dict["updated_at"] = new_dict["updated_at"].strftime('%Y-%m-%dT%H:%M')
         
         new_dict.pop('_sa_instance_state', None)
 
@@ -198,7 +198,7 @@ def put_user(user_id):
         user.user_name = request.get_json()['user_name']
         user.email = request.get_json()['email']
         user.password = request.get_json()['password']
-        user.updated_at = datetime.utcnow()
+        user.updated_at = datetime.now()
         db.session.add(user)
         db.session.commit()
     
@@ -290,7 +290,7 @@ def put_log(log_id):
         log.title = request.get_json()['title']
         log.description = request.get_json()['description']
         log.status = request.get_json()['status']
-        log.updated_at = datetime.utcnow()
+        log.updated_at = datetime.now()
         db.session.add(log)
         db.session.commit()
 
@@ -358,7 +358,7 @@ def put_topics(topic_id):
         topic = Topic.query.get_or_404(topic_id)
         topic.log_id = request.get_json()['log_id']
         topic.name = request.get_json()['name']
-        topic.updated_at = datetime.utcnow()
+        topic.updated_at = datetime.now()
         db.session.add(topic)
         db.session.commit()
 
